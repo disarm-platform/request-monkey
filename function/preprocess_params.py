@@ -1,5 +1,8 @@
-# Receives the params dict
-# Throw an error any time a test for a param fails.
-# Otherwise, return nothing
+from function.preprocess_helpers import required_exists, is_type
+
+
 def preprocess(params: dict):
-    raise ValueError('Need to implement `preprocess` steps in function/preprocess_params.py or replace with `pass`')
+    required_exists('func_name', params)
+
+    # Optional, but if exists, must be string
+    is_type('func_name', params, str)
