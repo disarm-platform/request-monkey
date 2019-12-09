@@ -1,0 +1,43 @@
+{
+  "layer_names": [
+    "elev_m"
+  ],
+  "points": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            377.215576171875,
+              12.940322128384627
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            380.775146484375,
+              12.940322128384627
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            380.775146484375,
+              15.0827316716058
+          ]
+        }
+      }
+    ]
+  }
+}

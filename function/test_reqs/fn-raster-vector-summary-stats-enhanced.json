@@ -1,0 +1,41 @@
+{
+  "subject": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "has_prop": true
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                31.011657714843746,
+                -26.4090906208143
+              ],
+              [
+                31.26983642578125,
+                -26.4090906208143
+              ],
+              [
+                31.26983642578125,
+                -26.256472923285344
+              ],
+              [
+                31.011657714843746,
+                -26.256472923285344
+              ],
+              [
+                31.011657714843746,
+                -26.4090906208143
+              ]
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "raster": "https://lnl-dev-data.storage.googleapis.com/swz_pop.tif"
+}
