@@ -9,6 +9,13 @@ from urllib.request import urlretrieve
 # Mutates the params, replacing with local temporary file if required
 import tempdir
 
+# check if exist
+def check_if_exists(key, params):
+    if key not in params:
+        return False
+    else:
+        return True
+
 # Param must exist
 def required_exists(key, params):
     if key not in params:
