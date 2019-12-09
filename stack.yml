@@ -7,4 +7,3 @@ functions:
     lang: python-geospatial
     handler: ./function
     image: request-monkey:0.0.1
-
