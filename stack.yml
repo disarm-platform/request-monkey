@@ -4,14 +4,7 @@ provider:
   gateway: http://127.0.0.1:8080
 functions:
   request-monkey:
-    lang: dockerfile
-    handler: ./
-    image: request-monkey:latest
-    environment:
-      exec_timeout: 1020
-      write_timeout: 1000
-      read_timeout: 1000
-      combine_output: false
-    labels:
-      com.openfaas.scale.zero: true
+    lang: python-geospatial
+    handler: ./function
+    image: request-monkey:0.0.1
 
