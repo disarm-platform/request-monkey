@@ -57,7 +57,7 @@ def run_function(params: dict):
     if check_if_exists('func_name', params):
         file = get_test_req(params["func_name"])
         json_d  = json.dumps(file)
-        j = send_request(params["func_name"],d=json_d.encode('utf-8'))
+        j = send_request(params["func_name"],d=json_d.encode())
         return j
     else:
         pass
