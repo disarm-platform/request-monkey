@@ -41,7 +41,7 @@ def send_request(func_name,d):
     req = Request(base_url + func_name,data=d,headers=HEADERS)
     try:
         response = urlopen(req)
-        return response.read().decode('utf-8')
+        return response.read().decode()
     except URLError as e:
         if hasattr(e, 'reason'):
             print('We failed to reach a server.')
