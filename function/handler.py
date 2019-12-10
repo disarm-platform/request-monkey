@@ -38,9 +38,9 @@ def get_test_req(func_name):
 
 
 def send_request(func_name,d):
-    req = Request(base_url + func_name,data=d,headers=HEADERS)
+    request = Request(base_url + func_name,data=d,headers=HEADERS)
     try:
-        response = urlopen(req)
+        response = urlopen(request)
         return response.read().decode()
     except URLError as e:
         if hasattr(e, 'reason'):
@@ -55,9 +55,9 @@ def run_function(params: dict):
     preprocess(params)
     
     if check_if_exists('func_name', params):
-        file = get_test_req(params["func_name"])
-        json_d  = json.dumps(file)
-        response = send_request(params["func_name"],d=json_d.encode())
+        test_req_file = get_test_req(params["func_name"])
+        json_content  = json.dumps(test_req_file)
+        response = send_request(params["func_name"],d=json_content.encode())
         return response
     else:
         pass
