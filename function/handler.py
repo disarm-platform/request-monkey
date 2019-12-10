@@ -9,9 +9,10 @@ from pathlib import Path
 # `run_function` receives `params` as a dict
 # Return something which is serializable using `json.dumps()`
 
-base_url = 'https://faas.srv3.disarm.io/function/'
+base_url = 'https://faas.srv.disarm.io/function/'
 HEADERS = {
-    'accept': 'application/json'
+    'accept': 'application/json; utf-8'
+    
 }
 
 
@@ -37,10 +38,11 @@ def get_test_req(func_name):
         sys.exit()
 
 
-def send_request(func_name):
-    req = Request(base_url + func_name,headers=HEADERS)
+def send_request(func_name,d):
+    req = Request(base_url + func_name,data=d,headers=HEADERS)
     try:
         response = urlopen(req)
+        return response.read().decode('utf-8')
     except URLError as e:
         if hasattr(e, 'reason'):
             print('We failed to reach a server.')
@@ -55,8 +57,8 @@ def run_function(params: dict):
     
     if check_if_exists('func_name', params):
         file = get_test_req(params["func_name"])
-        json = send_request(params["func_name"])
-        print(json)
-        return json
+        json_d  = json.dumps(file)
+        j = send_request(params["func_name"],d=json_d.encode('utf-8'))
+        return j
     else:
         pass
