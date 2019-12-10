@@ -29,9 +29,8 @@ def get_test_req(func_name):
     try:
        cwd = os.getcwd()
        contents = ''
-       with open(os.path.join(cwd,'function','test_reqs',func_name + '.json'), 'r') as f:
-            for line in f.readlines():
-                    contents += line
+       with open(os.path.join(cwd,'function','test_reqs',func_name + '.json'), 'r', newline=None) as f:
+            contents = load_as_json(f)
        return contents
     except OSError:
         print("Could not open/read file:" + os.path.join(cwd,'function','test_reqs',func_name + '.json'))
