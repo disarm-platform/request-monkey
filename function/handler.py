@@ -11,8 +11,7 @@ from pathlib import Path
 
 base_url = 'https://faas.srv.disarm.io/function/'
 HEADERS = {
-    'accept': 'application/json; utf-8'
-    
+    'accept': 'application/json'
 }
 
 
