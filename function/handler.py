@@ -18,7 +18,7 @@ HEADERS = {
 
 def load_as_json(contents):
     try:
-        obj = json.loads(contents)
+        obj = json.load(contents)
         return obj
     except OSError:
         print("Could parse", contents + 'as json')
