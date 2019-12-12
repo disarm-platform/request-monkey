@@ -51,6 +51,11 @@ def send_request(func_name,d):
             print('The server couldn\'t fulfill the request.')
             print('Error code: ', e.code)
 
+def interpret_status_code(code):
+    if re.search("^2([0-9]+){2}", code):
+        return "function was successful"
+    return "request failed!"
+
 def get_function_info(name):
     print('testing {0} ......'.format(name))
     test_req_file = get_test_req(name)
