@@ -1,16 +1,15 @@
 # Request-monkey
 
-## Description
 
-- Is containerised function that takes a function name and does the following:
+- Is a containerised function that takes a parameter and does the following:
 
-    * checks if requests to the function are successful.
+    * checks if requests to functions are successful.
 
-    * measures the execution time of the function
+    * measures the execution time of the functions
 
 ## Steps to deploying
 
-1. open the CLI and run clone the repo using the command `git clone https://github.com/disarm-platform/request-monkey.git`
+1. open the CLI an clone the repository using the command `git clone https://github.com/disarm-platform/request-monkey.git`
 
 1. Change to the cloned directory using command`cd request-monkey`
 
@@ -23,11 +22,11 @@
 
 - The request-monkey takes a a json object of the form: 
     ```JSON
-    { "funct_name": "value" }
+    { "func_name": "value" }
     ```
     where value can be any of the following:
 
-        -  a function name in which case it returns the information of that particular function.
+        -  <function name> in which case it returns the information of that particular function.
         
         - "all" in which case it sends request to all the deployed  function and returns their infomation in a json array.
 
