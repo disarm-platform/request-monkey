@@ -62,9 +62,8 @@ def get_function_info(name):
     json_content  = json.dumps(test_req_file)
     start_time = time.time()
     response = send_request(name,d=json_content.encode())
-    info = {"execution_time":(time.time() - start_time), "status_code": response.getcode()}
+    info = {"execution_time":(time.time() - start_time), "status": interpret_status_code(str(response.getcode()))}
     return json.dumps(info)  
-
 def run_function(params: dict):
 
     preprocess(params)
