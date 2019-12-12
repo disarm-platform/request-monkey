@@ -80,7 +80,6 @@ def interpret_status_code(code):
     return "request failed!"
 
 def get_function_info(name):
-    print('testing {0} ......'.format(name))
     test_req_file = get_test_req(name)
     json_content  = json.dumps(test_req_file)
     start_time = time.time()
@@ -93,11 +92,13 @@ def run_function(params: dict):
     
     if check_if_exists('func_name', params):
         if params["func_name"] == "all":
-            dirName = os.path.join(os.getcwd(),'function','test_reqs')
-            fileNames = [f.split('.')[0] for f in os.listdir(dirName) if os.path.isfile(os.path.join(dirName, f))]
-            result = []
-            for f in fileNames:
-                print('executing test for {0}'.format(f))
-                get_function_info(f)
-            return json.dumps(result)
+            get_responses()
+            return
+            # dirName = os.path.join(os.getcwd(),'function','test_reqs')
+            # fileNames = [f.split('.')[0] for f in os.listdir(dirName) if os.path.isfile(os.path.join(dirName, f))]
+            # result = []
+            # for f in fileNames:
+            #     print('executing test for {0}'.format(f))
+            #     get_function_info(f)
+            # return json.dumps(result)
         return get_function_info(params['func_name'])
