@@ -8,13 +8,36 @@ import os
 from pathlib import Path
 import time
 import re
-# `run_function` receives `params` as a dict
-# Return something which is serializable using `json.dumps()`
-
-base_url = 'https://faas.srv.disarm.io/function/'
+import urllib.request
+from threading import Thread
+base_url = 'https://faas.srv3.disarm.io/function/'
 HEADERS = {
     'accept': 'application/json'
 }
+class GetUrlThread(Thread):
+    def __init__(self, url):
+        self.url = url
+        super(GetUrlThread, self).__init__()    
+
+    def run(self):
+        resp = urllib.request.urlopen(self.url)
+        print(self.url, resp.getcode())
+
+def get_responses():
+    dirName = os.path.join(os.getcwd(),'function','test_reqs')
+    fileNames = [f.split('.')[0] for f in os.listdir(dirName) if os.path.isfile(os.path.join(dirName, f))]
+    threads = []
+    start = time.time()
+    for f in fileNames:
+        t = GetUrlThread(base_url  + f)
+        threads.append(t)
+        t.start()
+    for t in threads:
+        t.join()
+    print("Elapsed time: %s" % (time.time()-start))
+# `run_function` receives `params` as a dict
+# Return something which is serializable using `json.dumps()`
+
 
 
 def load_as_json(contents):
