@@ -10,18 +10,20 @@ import time
 import re
 import urllib.request
 from threading import Thread
+from socket import timeout
+
 base_url = 'https://faas.srv3.disarm.io/function/'
 HEADERS = {
     'accept': 'application/json'
 }
 class GetUrlThread(Thread):
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, func_name):
+        self.func_name = func_name
         super(GetUrlThread, self).__init__()    
 
     def run(self):
-        resp = urllib.request.urlopen(self.url)
-        print(self.url, resp.getcode())
+        resp = get_function_info(self.func_name)
+        print(resp)
 
 def get_responses():
     dirName = os.path.join(os.getcwd(),'function','test_reqs')
@@ -29,7 +31,7 @@ def get_responses():
     threads = []
     start = time.time()
     for f in fileNames:
-        t = GetUrlThread(base_url  + f)
+        t = GetUrlThread(f)
         threads.append(t)
         t.start()
     for t in threads:
@@ -63,17 +65,19 @@ def get_test_req(func_name):
 
 def send_request(func_name,d):
     request = Request(base_url + func_name,data=d,headers=HEADERS,)
+    r = {"code": "none", "reason": "something went wrong"}
     try:
-        response = urlopen(request, timeout=300)
-        return response
+        response = urlopen(request, timeout=30)
+        r["code"] = response.getcode()
+        r["reason"] = "function works as expected"
     except URLError as e:
         if hasattr(e, 'reason'):
-            print('We failed to reach {0} server.'.format(func_name))
-            print('Reason: ', e.reason)
+            r["reason"] = e.reason
         elif hasattr(e, 'code'):
-            print('The server couldn\'t fulfill the request.')
-            print('Error code: ', e.code)
-
+            r["code"] = e.code
+    except timeout:
+        r["reason"] = "timeout"
+    return r
 def interpret_status_code(code):
     if re.search("^2([0-9]+){2}", code):
         return "function was successful"
@@ -83,9 +87,9 @@ def get_function_info(name):
     test_req_file = get_test_req(name)
     json_content  = json.dumps(test_req_file)
     start_time = time.time()
-    response = send_request(name,d=json_content.encode())
-    info = {"execution_time":(time.time() - start_time), "status": interpret_status_code(str(response.getcode()))}
-    return json.dumps(info)  
+    return send_request(name,d=json_content.encode())
+    # info = {"execution_time":(time.time() - start_time), "status": interpret_status_code(str(response.getcode()))}
+    # return json.dumps(info)  
 def run_function(params: dict):
 
     preprocess(params)
