@@ -79,9 +79,14 @@ class GetUrlThread(Thread):
         resp = get_function_info(self.func_name)
         self.result = resp
 
-def get_responses():
+def get_all_filenames():
     dirName = os.path.join(os.getcwd(),'function','test_reqs')
     fileNames = [f.split('.')[0] for f in os.listdir(dirName) if os.path.isfile(os.path.join(dirName, f))]
+    return fileNames
+
+
+def get_responses():
+    fileNames = get_all_filenames()
     threads = []
     start = time.time()
     for f in fileNames:
