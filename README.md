@@ -31,13 +31,3 @@
         - "all" in which case it sends request to all the deployed  function and returns their infomation in a json array.
 
         - "random", picks a random function, sends a request and returns the information
-
-## Progress
-
-- Works if you specify the function name
-
-- Still implementing all and random options
-
-## Blockers
-
-- Some functions take to long to reply hence causing request monkey to hang
