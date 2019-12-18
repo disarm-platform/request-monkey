@@ -16,31 +16,9 @@ base_url = 'https://faas.srv3.disarm.io/function/'
 HEADERS = {
     'accept': 'application/json'
 }
-class GetUrlThread(Thread):
-    def __init__(self, func_name):
-        self.func_name = func_name
-        super(GetUrlThread, self).__init__()    
-
-    def run(self):
-        resp = get_function_info(self.func_name)
-        print(resp)
-
-def get_responses():
-    dirName = os.path.join(os.getcwd(),'function','test_reqs')
-    fileNames = [f.split('.')[0] for f in os.listdir(dirName) if os.path.isfile(os.path.join(dirName, f))]
-    threads = []
-    start = time.time()
-    for f in fileNames:
-        t = GetUrlThread(f)
-        threads.append(t)
-        t.start()
-    for t in threads:
-        t.join()
-    print("Elapsed time: %s" % (time.time()-start))
+    # print("Elapsed time: %s" % (time.time()-start))
 # `run_function` receives `params` as a dict
 # Return something which is serializable using `json.dumps()`
-
-
 
 def load_as_json(contents):
     try:
@@ -65,7 +43,8 @@ def get_test_req(func_name):
 
 def send_request(func_name,d):
     request = Request(base_url + func_name,data=d,headers=HEADERS,)
-    r = {"code": "none", "reason": "something went wrong"}
+    r = {"function_name": func_name, "code": "", "reason": "something went wrong", "execution_time":""}
+    start_time = time.time()
     try:
         response = urlopen(request, timeout=30)
         r["code"] = response.getcode()
@@ -77,7 +56,9 @@ def send_request(func_name,d):
             r["code"] = e.code
     except timeout:
         r["reason"] = "timeout"
+    r["execution_time"] = time.time() - start_time
     return r
+
 def interpret_status_code(code):
     if re.search("^2([0-9]+){2}", code):
         return "function was successful"
@@ -86,23 +67,39 @@ def interpret_status_code(code):
 def get_function_info(name):
     test_req_file = get_test_req(name)
     json_content  = json.dumps(test_req_file)
-    start_time = time.time()
     return send_request(name,d=json_content.encode())
-    # info = {"execution_time":(time.time() - start_time), "status": interpret_status_code(str(response.getcode()))}
-    # return json.dumps(info)  
+
+class GetUrlThread(Thread):
+    def __init__(self, func_name):
+        self.func_name = func_name
+        self.result = {}
+        super(GetUrlThread, self).__init__()    
+
+    def run(self):
+        resp = get_function_info(self.func_name)
+        self.result = resp
+
+def get_responses():
+    dirName = os.path.join(os.getcwd(),'function','test_reqs')
+    fileNames = [f.split('.')[0] for f in os.listdir(dirName) if os.path.isfile(os.path.join(dirName, f))]
+    threads = []
+    start = time.time()
+    for f in fileNames:
+        t = GetUrlThread(f)
+        threads.append(t)
+        t.start()
+    for t in threads:
+        t.join()
+    result = []
+    for t in threads:
+        result.append(t.result)
+    return result
+
 def run_function(params: dict):
 
     preprocess(params)
     
     if check_if_exists('func_name', params):
         if params["func_name"] == "all":
-            get_responses()
-            return
-            # dirName = os.path.join(os.getcwd(),'function','test_reqs')
-            # fileNames = [f.split('.')[0] for f in os.listdir(dirName) if os.path.isfile(os.path.join(dirName, f))]
-            # result = []
-            # for f in fileNames:
-            #     print('executing test for {0}'.format(f))
-            #     get_function_info(f)
-            # return json.dumps(result)
+            return json.dumps(get_responses())
         return get_function_info(params['func_name'])
