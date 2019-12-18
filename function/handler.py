@@ -113,5 +113,6 @@ def run_function(params: dict):
     if check_if_exists('func_name', params):
         if params["func_name"] == "all":
             return json.dumps(get_responses())
-        
+        elif params["func_name"] == "random":
+            return json.dumps(test_random_func())
         return get_function_info(params['func_name'])
