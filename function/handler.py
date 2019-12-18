@@ -11,6 +11,7 @@ import re
 import urllib.request
 from threading import Thread
 from socket import timeout
+import random
 
 base_url = 'https://faas.srv3.disarm.io/function/'
 HEADERS = {
@@ -79,11 +80,16 @@ class GetUrlThread(Thread):
         resp = get_function_info(self.func_name)
         self.result = resp
 
+def test_random_func():
+    fileNames = get_all_filenames()
+    return get_function_info(random.choice(fileNames))
+    
+
+
 def get_all_filenames():
     dirName = os.path.join(os.getcwd(),'function','test_reqs')
     fileNames = [f.split('.')[0] for f in os.listdir(dirName) if os.path.isfile(os.path.join(dirName, f))]
     return fileNames
-
 
 def get_responses():
     fileNames = get_all_filenames()
@@ -107,4 +113,5 @@ def run_function(params: dict):
     if check_if_exists('func_name', params):
         if params["func_name"] == "all":
             return json.dumps(get_responses())
+        
         return get_function_info(params['func_name'])
