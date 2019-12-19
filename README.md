@@ -39,9 +39,9 @@ Request monkey is a containerised function that takes a parameter and does the f
 
 1. open the CLI and clone the repository using the command `git clone https://github.com/disarm-platform/request-monkey.git`
 
-1. Copy the test_reqs folder to the `request_monkey` folder. 
+1. Copy the test_reqs folder to the `request_monkey/function` folder. 
 
-1. Change to the cloned directory using command `cd request-monkey`
+1. Change to the `request monkey folder` directory using command `cd request-monkey`
 
 1. Build the function using the command `faas build`
 
