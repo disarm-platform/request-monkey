@@ -43,6 +43,8 @@ Request monkey is a containerised function that takes a parameter and does the f
 
 1. Change to the `request monkey folder` directory using command `cd request-monkey`
 
+1. Run the command `faas template pull https://github.com/disarm-platform/faas-templates.git` to pull the project template. 
+
 1. Build the function using the command `faas build`
 
 1. Deploy the function to the required gateway using
