@@ -108,9 +108,9 @@ def get_responses():
 
 def run_function(params: dict):
 
-    if params["function_name"] == "all":
+    if params["all"]:
         return get_responses()
-    elif params["function_name"] == "random":
+    elif params["random"]:
         return test_random_func()
 
     return get_function_info(params['function_name'])
