@@ -1,5 +1,12 @@
-from function.preprocess_helpers import is_type, required_exists
+# If exists, param must be of given type
+def is_type(key, params: dict, param_type):
+    param = params.get(key)
 
+    if param is None:
+        return
+
+    if not isinstance(params[key], param_type):
+        raise ValueError(f'Params \'{key}\' is not of type {param_type}')
 
 def preprocess(params: dict):
 
