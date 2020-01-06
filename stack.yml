@@ -6,7 +6,7 @@ functions:
   request-monkey:
     lang: python-geospatial
     handler: ./function
-    image: request-monkey:0.0.1
+    image: locational/request-monkey:0.0.1
     environment:
       exec_timeout: 60
       write_timeout: 70
