@@ -30,21 +30,21 @@ def load_as_json(contents):
         sys.exit()
 
 
-def get_test_req(func_name):
+def get_test_req(function_name):
     try:
        cwd = os.getcwd()
        contents = ''
-       with open(os.path.join(cwd,'function','test_reqs',func_name + '.json'), 'r', newline=None) as f:
+       with open(os.path.join(cwd,'function','test_reqs',function_name + '.json'), 'r', newline=None) as f:
             contents = load_as_json(f)
        return contents
     except OSError:
-        print("Could not open/read file:" + os.path.join(cwd,'function','test_reqs',func_name + '.json'))
+        print("Could not open/read file:" + os.path.join(cwd,'function','test_reqs',function_name + '.json'))
         sys.exit()
 
 
-def send_request(func_name,d):
-    request = Request(base_url + func_name,data=d,headers=HEADERS,)
-    r = {"function_name": func_name, "code": "", "reason": "something went wrong", "execution_time":""}
+def send_request(function_name,d):
+    request = Request(base_url + function_name,data=d,headers=HEADERS,)
+    r = {"function_name": function_name, "code": "", "reason": "something went wrong", "execution_time":""}
     start_time = time.time()
     try:
         response = urlopen(request, timeout=30)
@@ -71,13 +71,13 @@ def get_function_info(name):
     return send_request(name,d=json_content.encode())
 
 class GetUrlThread(Thread):
-    def __init__(self, func_name):
-        self.func_name = func_name
+    def __init__(self, function_name):
+        self.function_name = function_name
         self.result = {}
         super(GetUrlThread, self).__init__()    
 
     def run(self):
-        resp = get_function_info(self.func_name)
+        resp = get_function_info(self.function_name)
         self.result = resp
 
 def test_random_func():
@@ -108,11 +108,9 @@ def get_responses():
 
 def run_function(params: dict):
 
-    preprocess(params)
-    
-    if check_if_exists('func_name', params):
-        if params["func_name"] == "all":
-            return json.dumps(get_responses())
-        elif params["func_name"] == "random":
-            return json.dumps(test_random_func())
-        return get_function_info(params['func_name'])
+    if params["function_name"] == "all":
+        return get_responses()
+    elif params["function_name"] == "random":
+        return test_random_func()
+
+    return get_function_info(params['function_name'])
