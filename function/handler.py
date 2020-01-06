@@ -32,7 +32,7 @@ def get_test_req(function_name):
     try:
        cwd = os.getcwd()
        contents = ''
-       with open(os.path.join(cwd,'function','test_reqs',function_name + '.json'), 'r', newline=None) as f:
+       with open(os.path.join(cwd,'test_reqs',function_name + '.json'), 'r', newline=None) as f:
             contents = load_as_json(f)
        return contents
     except OSError:
@@ -105,10 +105,13 @@ def get_responses():
     return result
 
 def run_function(params: dict):
-
+   
     if params["all"]:
         return get_responses()
     elif params["random"]:
         return test_random_func()
-
+    
     return get_function_info(params['function_name'])
+
+
+
