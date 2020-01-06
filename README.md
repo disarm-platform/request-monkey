@@ -55,7 +55,7 @@ Request monkey is a containerised function that takes a parameter and does the f
 
 - The request-monkey takes a a json object of the form: 
     ```JSON
-    { "func_name": "value" }
+    { "function_name": "value" }
     ```
     where `"value"` can be any of the following:
 
