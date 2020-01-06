@@ -1,8 +1,9 @@
-from function.preprocess_helpers import check_if_exists, is_type
+from function.preprocess_helpers import is_type, required_exists
 
 
 def preprocess(params: dict):
-    if check_if_exists('func_name', params): 
-        # Optional, but if exists, must be string
-        is_type('func_name', params, str)
+    required_exists('function_name', params): 
+    is_type('function_name', params, str)
+    
+    
 
