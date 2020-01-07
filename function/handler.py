@@ -1,5 +1,5 @@
 from urllib.request import Request, urlopen
-from urllib.error import URLError
+from urllib.error import HTTPError
 import json
 from os import sys
 import os
@@ -59,9 +59,11 @@ def send_request(function_name, d):
         response = urlopen(request, timeout=30)
         r["code"] = response.getcode()
         r["reason"] = "function works as expected"
-    except URLError as e:
+    except HTTPError as e:
         if hasattr(e, 'reason'):
             r["reason"] = e.reason
+        if hasattr(e, 'code'):
+            r["code"] = e.code
     except timeout:
         r["reason"] = "timeout"
     r["execution_time"] = time.time() - start_time
