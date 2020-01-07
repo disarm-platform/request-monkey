@@ -105,13 +105,12 @@ def get_responses():
     return result
 
 def run_function(params: dict):
-   
-    if params["all"]:
-        return get_responses()
-    elif params["random"]:
+    if "all" in params:
+       return get_responses()
+    elif "random" in params:
         return test_random_func()
-    
-    return get_function_info(params['function_name'])
+    elif "function_name" in params:
+        return get_function_info()
 
 
 
