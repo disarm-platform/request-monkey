@@ -32,7 +32,7 @@ def get_test_req(function_name):
     try:
        cwd = os.getcwd()
        contents = ''
-       with open(os.path.join(cwd,'test_reqs',function_name + '.json'), 'r', newline=None) as f:
+       with open(os.path.join(cwd,'function','test_reqs',function_name + '.json'), 'r', newline=None) as f:
             contents = load_as_json(f)
        return contents
     except OSError:
