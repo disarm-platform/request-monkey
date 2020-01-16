@@ -104,9 +104,11 @@ def test_all():
 
 
 def handle(params: dict):
+    if "base_url" in params:
+        base_url = params.get(base_url, base_url)
     if "all" in params:
         return test_all()
     elif "random" in params:
         return test_random_func()
     elif "function_name" in params:
-        return test_function(params["function_name"])
+        return test_function(params.get("function_name"))
