@@ -4,7 +4,7 @@ provider:
   gateway: https://faas.srv3.disarm.io
 functions:
   request-monkey:
-    lang: python-geospatial
+    lang: python3
     handler: ./function
     image: locational/request-monkey:0.0.2
     environment:
