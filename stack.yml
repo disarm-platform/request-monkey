@@ -6,7 +6,7 @@ functions:
   request-monkey:
     lang: python3
     handler: ./function
-    image: locational/request-monkey:0.0.2
+    image: locational/request-monkey:0.0.3
     environment:
       exec_timeout: 60
       write_timeout: 70
