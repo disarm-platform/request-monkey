@@ -11,7 +11,7 @@ from threading import Thread
 from socket import timeout
 import random
 
-base_url = 'https://faas.srv3.disarm.io/function/'
+base_url = 'https://faas.srv.disarm.io/function/'
 HEADERS = {
     'accept': 'application/json'
 }
@@ -72,7 +72,7 @@ def send_request(function_name, d):
 
 def test_function(name):
     test_req_file = get_test_req(name)
-    json_content = json.dumps(test_req_file)
+    json_content = test_req_file
     return send_request(name, d=json_content.encode())
 
 
@@ -103,7 +103,7 @@ def test_all():
     return result
 
 
-def run_function(params: dict):
+def handle(params: dict):
     if "all" in params:
         return test_all()
     elif "random" in params:
