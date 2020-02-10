@@ -12,9 +12,7 @@ from socket import timeout
 import random
 
 base_url = 'https://faas.srv.disarm.io/function/'
-HEADERS = {
-    'accept': 'application/json'
-}
+HEADERS = {'accept': 'application/json'}
 
 
 class GetUrlThread(Thread):
@@ -41,19 +39,27 @@ def get_test_req(function_name):
     try:
         cwd = os.getcwd()
         contents = ''
-        with open(os.path.join(cwd, 'function', 'test_reqs', function_name + '.json'), 'r', newline=None) as f:
+        with open(os.path.join(cwd, 'function', 'test_reqs',
+                               function_name + '.json'),
+                  'r',
+                  newline=None) as f:
             contents = load_as_json(f)
         return contents
     except OSError:
-        print("Could not open/read file:" + os.path.join(cwd,
-                                                         'function', 'test_reqs', function_name + '.json'))
+        print("Could not open/read file:" +
+              os.path.join(cwd, 'function', 'test_reqs', function_name +
+                           '.json'))
         sys.exit()
 
 
 def send_request(function_name, d):
     request = Request(base_url + function_name, data=d, headers=HEADERS)
-    r = {"function_name": function_name, "code": "",
-         "reason": "something went wrong", "execution_time": ""}
+    r = {
+        "function_name": function_name,
+        "code": "",
+        "reason": "something went wrong",
+        "execution_time": ""
+    }
     start_time = time.time()
     try:
         response = urlopen(request, timeout=30)
@@ -83,8 +89,10 @@ def test_random_func():
 
 def get_all_filenames():
     dirName = os.path.join(os.getcwd(), 'function', 'test_reqs')
-    fileNames = [f.split('.')[0] for f in os.listdir(
-        dirName) if os.path.isfile(os.path.join(dirName, f))]
+    fileNames = [
+        f.split('.')[0] for f in os.listdir(dirName)
+        if os.path.isfile(os.path.join(dirName, f))
+    ]
     return fileNames
 
 
