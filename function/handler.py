@@ -36,7 +36,7 @@ def load_as_json(contents):
         sys.exit()
 
 
-# TODO: Replace with getting from the repo
+# TODO: Replace with getting test_req from the repo
 def get_test_req(function_name):
     try:
         cwd = os.getcwd()
@@ -87,6 +87,7 @@ def test_function(base_url: str, name: str):
 def test_random_func(base_url: str):
     fileNames = get_all_filenames()
     random_choice = random.choice(fileNames)
+    print(random_choice)
     return test_function(base_url, random_choice)
 
 
@@ -110,17 +111,21 @@ def test_all(base_url: str):
 
     for thread in threads:
         thread.join()
-    result = []
 
+    result = []
     for thread in threads:
         result.append(thread.result)
-        
+
     return result
 
 
-def handle(params: dict):
-    if "base_url" in params:
-        base_url = params.get(base_url, default_base_url)
+def handle(params_raw: str):
+    try:
+        params = json.loads(params_raw)
+    except json.decoder.JSONDecodeError:
+        return "Invalid JSON provided as params"
+
+    base_url = params.get('base_url', default_base_url)
 
     if "all" in params:
         return test_all(base_url)
