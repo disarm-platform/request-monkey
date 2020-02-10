@@ -11,18 +11,19 @@ from threading import Thread
 from socket import timeout
 import random
 
-base_url = 'https://faas.srv.disarm.io/function/'
+default_base_url = 'https://faas.srv.disarm.io/function/'
 HEADERS = {'accept': 'application/json'}
 
 
 class GetUrlThread(Thread):
-    def __init__(self, function_name):
+    def __init__(self, base_url, function_name):
+        self.base_url = base_url
         self.function_name = function_name
         self.result = {}
         super(GetUrlThread, self).__init__()
 
     def run(self):
-        resp = test_function(self.function_name)
+        resp = test_function(self.base_url, self.function_name)
         self.result = resp
 
 
@@ -35,6 +36,7 @@ def load_as_json(contents):
         sys.exit()
 
 
+# TODO: Replace with getting from the repo
 def get_test_req(function_name):
     try:
         cwd = os.getcwd()
@@ -52,7 +54,7 @@ def get_test_req(function_name):
         sys.exit()
 
 
-def send_request(function_name, d):
+def send_request(base_url, function_name, d):
     request = Request(base_url + function_name, data=d, headers=HEADERS)
     r = {
         "function_name": function_name,
@@ -76,15 +78,16 @@ def send_request(function_name, d):
     return r
 
 
-def test_function(name):
+def test_function(base_url: str, name: str):
     test_req_file = get_test_req(name)
     json_content = test_req_file
-    return send_request(name, d=json_content.encode())
+    return send_request(base_url, name, d=json_content.encode())
 
 
-def test_random_func():
+def test_random_func(base_url: str):
     fileNames = get_all_filenames()
-    return test_function(random.choice(fileNames))
+    random_choice = random.choice(fileNames)
+    return test_function(base_url, random_choice)
 
 
 def get_all_filenames():
@@ -96,27 +99,33 @@ def get_all_filenames():
     return fileNames
 
 
-def test_all():
+def test_all(base_url: str):
     fileNames = get_all_filenames()
     threads = []
-    for f in fileNames:
-        t = GetUrlThread(f)
-        threads.append(t)
-        t.start()
-    for t in threads:
-        t.join()
+
+    for fileName in fileNames:
+        thread = GetUrlThread(base_url, fileName)
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
     result = []
-    for t in threads:
-        result.append(t.result)
+
+    for thread in threads:
+        result.append(thread.result)
+        
     return result
 
 
 def handle(params: dict):
     if "base_url" in params:
-        base_url = params.get(base_url, base_url)
+        base_url = params.get(base_url, default_base_url)
+
     if "all" in params:
-        return test_all()
+        return test_all(base_url)
     elif "random" in params:
-        return test_random_func()
+        return test_random_func(base_url, )
     elif "function_name" in params:
-        return test_function(params.get("function_name"))
+        function_name = params.get("function_name")
+        return test_function(base_url, function_name)
